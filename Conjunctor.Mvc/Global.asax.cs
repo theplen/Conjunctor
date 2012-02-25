@@ -6,6 +6,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Data.Entity;
+using Conjunctor.Mvc.Models;
 
 namespace Conjunctor.Mvc
 {
@@ -44,6 +46,13 @@ namespace Conjunctor.Mvc
             RegisterRoutes(RouteTable.Routes);
 
             BundleTable.Bundles.RegisterTemplateBundles();
+            var b = BundleTable.Bundles.GetBundleFor("~/Scripts/js");
+            b.AddDirectory("~/Scripts",
+                searchPattern: "conjunctor*.js",
+                searchSubdirectories: false,
+                throwIfNotExist: false);
+
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<ConjunctorContext, Migrations.Configuration>());
         }
     }
 }

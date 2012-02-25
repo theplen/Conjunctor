@@ -459,6 +459,13 @@ ul#social li {
         background: url("../Images/twitter.png") no-repeat;
     }
 
+#next-meeting {
+    background-color: #ffffee;
+}
+
+.past-meeting {
+    text-decoration: line-through;
+}
 
 /********************
 *   Mobile Styles   *

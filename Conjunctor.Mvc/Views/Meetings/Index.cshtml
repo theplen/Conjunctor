@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Meeting>
+
+@{
+    var nextMeetingDate = Model.Where(m => m.Date >= DateTime.Now).OrderBy(m => m.Date).Select(m => m.Date).FirstOrDefault();
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr class="@(item.Date < DateTime.Now ? "past-meeting" : null)">
+        <td id="@(item.Date == nextMeetingDate ? "next-meeting" : null)">
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.MeetingId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.MeetingId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.MeetingId })
+        </td>
+    </tr>
+}
+
+</table>
