@@ -3,29 +3,32 @@ namespace Conjunctor.Mvc.Migrations
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
+    using System.Data.SqlClient;
     using System.Linq;
+    using Conjunctor.Mvc.Models;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<Conjunctor.Mvc.Models.ConjunctorContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<ConjunctorContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(Conjunctor.Mvc.Models.ConjunctorContext context)
+        protected override void Seed(ConjunctorContext context)
         {
-            //  This method will be called after migrating to the latest version.
-
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            // Ugly hack to get around an automatic migrations bug that tries
+            // execute this command every time Application_Start fires.
+            try
+            {
+                context.Database.ExecuteSqlCommand("ALTER TABLE MeetingAttachments ADD CONSTRAINT UX_Hash UNIQUE(Hash)");
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number != 2714)
+                {
+                    throw;
+                }
+            }
         }
     }
 }

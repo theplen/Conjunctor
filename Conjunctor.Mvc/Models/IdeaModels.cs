@@ -18,5 +18,6 @@ namespace Conjunctor.Mvc.Models
         public string Description { get; set; }
 
         public ICollection<Meeting> Meetings { get; set; }
+        public ICollection<Tag> Tags { get; set; }
     }
 }
